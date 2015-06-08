@@ -7,9 +7,9 @@
 //  MIT Licensed
 //
 
-  module.exports = {
+    module.exports = {
     
-    saveImageDataToLibrary:function(successCallback, failureCallback, canvasId) {
+    saveImageDataToLibrary:function(successCallback, failureCallback, canvasId, _imageData) {
         // successCallback required
         if (typeof successCallback != "function") {
             console.log("Canvas2ImagePlugin Error: successCallback is not a function");
@@ -19,8 +19,14 @@
         }
         else {
             var canvas = (typeof canvasId === "string") ? document.getElementById(canvasId) : canvasId;
-            var imageData = canvas.toDataURL().replace(/data:image\/png;base64,/,'');
-            return cordova.exec(successCallback, failureCallback, "Canvas2ImagePlugin","saveImageDataToLibrary",[imageData]);
+			var imageData;
+			if(canvasId === "direct"){
+				imageData = _imageData.replace(/data:image\/png;base64,/,'');
+			}
+			else{
+				imageData = canvas.toDataURL().replace(/data:image\/png;base64,/,'');
+            }
+			  return cordova.exec(successCallback, failureCallback, "Canvas2ImagePlugin","saveImageDataToLibrary",[imageData]);
         }
     }
   };
